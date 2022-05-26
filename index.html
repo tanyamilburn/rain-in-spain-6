@@ -10,16 +10,15 @@
   </head>
   <body>
     <h1 class="heading">Weather Dashboard</h1> 
-   <main class ="main">
-       <aside class="searchCity">
-           <h3>Search for City
-               <div ><input class="input" placeholder="Location"> </div>
-               <button class="searchButton">Search</button> 
-               <h4>Past Searches</h4>
-               <div class = "pastSearches"></div>
-           </h3> 
-        </aside>
-        <div class = "cityForecast">
+    <main class ="main">
+      <aside class="searchCity">
+        <h3>Search for City</h3> 
+        <input class="input" placeholder="Location"> 
+        <button class="searchButton">Search</button> 
+        <h4>Past Searches</h4>
+        <div class="pastSearches"></div>
+      </aside>
+        <!-- <div class = "cityForecast">
             <h3>City Results</h3> 
             <div class ="results"></div>
             <h3>5 day Forecast</h3>
@@ -30,11 +29,17 @@
             <div class="forecast" id="day4">Date: Temp: Wind: Humidity:</div>
             <div class="forecast" id="day5">Date: Temp: Wind: Humidity:</div>
             </div>
+        </div> -->
+      
+      <div class="right">
+        <div class="cityForecast"></div>
+        <div>
+          <h3>5 Day Forecast</h3>
+          <div class="fiveDayForecast"></div>
         </div>
-    </main>
-    
-    
-         
-	<script src="script.js"></script>
+      </div>
+
+    </main>      
+	  <script src="script.js"></script>
   </body>
 </html>

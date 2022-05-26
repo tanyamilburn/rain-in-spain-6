@@ -5,8 +5,10 @@ let APIkey = "f767322c6603d96df24acb38c5f96cbd"
 let input = document.querySelector('.input')
 // Search button event listener
 let searchButton = document.querySelector(".searchButton");
+let cityForecast = document.querySelector(".cityForecast")
 searchButton.addEventListener("click", callGeoCoordinates)
 searchButton.addEventListener("click", createSearchList)
+
 
 // Fetch request to API
 function callGeoCoordinates(){
@@ -18,6 +20,7 @@ function callGeoCoordinates(){
     fetch(url)
         .then(result => result.json())
         .then(result => {
+            console.log(result)
             let temp = convertKToF(result.main.temp)
             getForecastWithCoords(result.coord)
 
@@ -40,8 +43,41 @@ function createSearchList(){
     pastSearchButton.innerHTML= input.value;
     let pastSearchSection = document.querySelector(".pastSearches");
     pastSearchSection.appendChild(pastSearchButton);
-    
 }
+
+function createTodayForecast(cityName) {
+    let cityTitle = document.createElement("h2")
+    cityTitle.innerHTML = cityName
+    cityForecast.appendChild(cityTitle)
+}
+
+function create5DayScaffold() {
+    let fiveDayForecast = document.querySelector(".fiveDayForecast")
+
+    for (i = 1; i < 6; i++) {
+        let forecastBox = document.createElement("div")
+        let date = document.createElement("h2")
+        let temp = document.createElement("p")
+        let wind = document.createElement("p")
+        let humidity = document.createElement("p")
+
+        forecastBox.classList.add("forecast")
+        forecastBox.classList.add(`day${i}`)
+        date.classList.add("date")
+        temp.classList.add("temp")
+        wind.classList.add("wind")
+        humidity.classList.add("humidity")
+
+        forecastBox.appendChild(date)
+        forecastBox.appendChild(temp)
+        forecastBox.appendChild(wind)
+        forecastBox.appendChild(humidity)
+        fiveDayForecast.appendChild(forecastBox)
+    }
+}
+
+create5DayScaffold()
+createTodayForecast("gobbly gook")
 
 //populate information into HTML (respons object)
 //render information to screen
