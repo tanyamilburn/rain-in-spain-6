@@ -5,25 +5,38 @@ let APIkey = "f767322c6603d96df24acb38c5f96cbd"
 let input = document.querySelector('.input')
 // Search button event listener
 let searchButton = document.querySelector(".searchButton");
-// searchButton.addEventListener("click", callGeoCoordinates)
+searchButton.addEventListener("click", callGeoCoordinates)
 searchButton.addEventListener("click", createSearchList)
 
 // Fetch request to API
 function callGeoCoordinates(){
     //capture input field
     let cityName = input.value
-    console.log(cityName)
     let baseUrl = "http://api.openweathermap.org/data/2.5/weather?q="
     let url = baseUrl + cityName + "&APPID=" + APIkey
 
     fetch(url)
-        .then(res => console.log(res))
+        .then(result => result.json())
+        .then(result => {
+            let temp = convertKToF(result.main.temp)
+            getForecastWithCoords(result.coord)
+
+        })
 
     //pass key into API
 }
+
+function getForecastWithCoord(coord){
+    
+}
+
+function convertKToF(tempInK){
+    return (tempInK + 459.67) * 5/9
+}
+
 // create past search buttons
 function createSearchList(){
-    const pastSearchButton = document.createElement("button");
+    let pastSearchButton = document.createElement("button");
     pastSearchButton.innerHTML= input.value;
     let pastSearchSection = document.querySelector(".pastSearches");
     pastSearchSection.appendChild(pastSearchButton);
