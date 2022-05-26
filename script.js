@@ -5,7 +5,8 @@ let APIkey = "f767322c6603d96df24acb38c5f96cbd"
 let input = document.querySelector('.input')
 // Search button event listener
 let searchButton = document.querySelector(".searchButton");
-searchButton.addEventListener("click", callGeoCoordinates)
+// searchButton.addEventListener("click", callGeoCoordinates)
+searchButton.addEventListener("click", createSearchList)
 
 // Fetch request to API
 function callGeoCoordinates(){
@@ -19,6 +20,14 @@ function callGeoCoordinates(){
         .then(res => console.log(res))
 
     //pass key into API
+}
+// create past search buttons
+function createSearchList(){
+    const pastSearchButton = document.createElement("button");
+    pastSearchButton.innerHTML= input.value;
+    let pastSearchSection = document.querySelector(".pastSearches");
+    pastSearchSection.appendChild(pastSearchButton);
+    
 }
 
 //populate information into HTML (respons object)
