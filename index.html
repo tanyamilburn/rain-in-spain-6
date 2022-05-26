@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather Report</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
+  </head>
+  <body>
+    <h1 class="heading">Weather Dashboard</h1> 
+   <main class ="main">
+       <aside class="searchCity">
+           <h3>Search for City
+               <div ><input class="input" placeholder="Location"> </div>
+               <button class="searchButton">Search</button> 
+               <h4>Past Searches</h4>
+               <div class = "pastSearches"></div>
+           </h3> 
+        </aside>
+        <div class = "cityForecast">
+            <h3>City Results</h3> 
+            <div class ="results"></div>
+            <h3>5 day Forecast</h3>
+            <div class ="fiveDayForecast">
+            <div class="forecast" id="day1">Date: Temp: Wind: Humidity:</div>
+            <div class="forecast" id="day2">Date: Temp: Wind: Humidity:</div>
+            <div class="forecast" id="day3">Date: Temp: Wind: Humidity:</div>
+            <div class="forecast" id="day4">Date: Temp: Wind: Humidity:</div>
+            <div class="forecast" id="day5">Date: Temp: Wind: Humidity:</div>
+            </div>
+        </div>
+    </main>
+    
+    
+         
+	<script src="script.js"></script>
+  </body>
+</html>
