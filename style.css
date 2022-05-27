@@ -16,24 +16,31 @@
     
 }
 .cityForecast{
-    /* border: 1px solid blue; */
+    border: 2px solid black;
+    padding: 3rem;
     /* margin-left: 3rem; */
 }
 .fiveDayForecast{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;  
+    color: white;
 
 }
 .forecast{
     background-color: rgb(5, 5, 152);
     padding: 3rem;
     margin: 1rem;
-    width: 4rem;
-    height: 2rem;
+    /* width: 4rem;
+    height: 2rem; */
 }
 .right {
     display: flex;
     flex-direction: column;
     border: red 2px solid;
+    margin-left: 2rem;
+}
+
+.day1 .temp {
+    color: red;
 }

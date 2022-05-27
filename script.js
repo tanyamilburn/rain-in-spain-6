@@ -6,9 +6,11 @@ let input = document.querySelector('.input')
 // Search button event listener
 let searchButton = document.querySelector(".searchButton");
 let cityForecast = document.querySelector(".cityForecast")
+let fiveDayForecast = document.querySelector(".fiveDayForecast")
 searchButton.addEventListener("click", callGeoCoordinates)
 searchButton.addEventListener("click", createSearchList)
-
+// searchButton.addEventListener("click", createTodayForecast)
+let today = moment();
 
 // Fetch request to API
 function callGeoCoordinates(){
@@ -22,14 +24,27 @@ function callGeoCoordinates(){
         .then(result => {
             console.log(result)
             let temp = convertKToF(result.main.temp)
+            
             getForecastWithCoords(result.coord)
+            
+            renderDailyForecastToScreen(result.name)
 
         })
 
     //pass key into API
 }
 
-function getForecastWithCoord(coord){
+
+function getForecastWithCoords(coord){
+    let lon = coord.lon
+    let lat = coord.lat
+    let url = "api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey
+    fetch(url)
+    .then(result => result.json())
+    .then(result => {
+          console.log(result)
+    })
+
     
 }
 
@@ -45,14 +60,42 @@ function createSearchList(){
     pastSearchSection.appendChild(pastSearchButton);
 }
 
-function createTodayForecast(cityName) {
-    let cityTitle = document.createElement("h2")
+
+function renderDailyForecastToScreen(cityName) {
+    let cityTitle = document.querySelector(".cityTitle")
     cityTitle.innerHTML = cityName
-    cityForecast.appendChild(cityTitle)
+
 }
 
-function create5DayScaffold() {
-    let fiveDayForecast = document.querySelector(".fiveDayForecast")
+function createForecastScaffold() {
+    let cityTitle = document.createElement("h2")
+    let todayDate = document.createElement("h2")
+    let todayTemp = document.createElement("p")
+    let todayWind = document.createElement("p")
+    let todayHumidity = document.createElement("p")
+    let uvIndex = document.createElement("p")
+    
+    cityTitle.classList.add("cityTitle")
+    todayDate.classList.add("todayDate")
+    todayTemp.classList.add("todayTemp")
+    todayWind.classList.add("todayWind")
+    todayHumidity.classList.add("todayHumidity")
+    uvIndex.classList.add("uvIndex")
+    
+    cityForecast.appendChild(cityTitle)
+    cityForecast.appendChild(todayDate)
+    cityForecast.appendChild(todayTemp)
+    cityForecast.appendChild(todayWind)
+    cityForecast.appendChild(todayHumidity)
+    cityForecast.appendChild(uvIndex)
+
+    $(".todayDate").text(today.format("MM/DD/YY"));
+    todayTemp.innerHTML = "Temp:"
+    todayWind.innerHTML = "Wind:"
+    todayHumidity.innerHTML = "Humidity:"
+    uvIndex.innerHTML = "UV:"
+
+
 
     for (i = 1; i < 6; i++) {
         let forecastBox = document.createElement("div")
@@ -73,11 +116,16 @@ function create5DayScaffold() {
         forecastBox.appendChild(wind)
         forecastBox.appendChild(humidity)
         fiveDayForecast.appendChild(forecastBox)
+
+        temp.innerHTML = "Temp:"
+        wind.innerHTML = "Wind:"
+        humidity.innerHTML = "Humidity:"
     }
 }
 
-create5DayScaffold()
-createTodayForecast("gobbly gook")
+createForecastScaffold()
+// create5DayScaffold()
+// createTodayForecast()
 
 //populate information into HTML (respons object)
 //render information to screen
