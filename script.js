@@ -1,72 +1,113 @@
-// require('dotenv').config()
-// console.log(process.env)
 let APIkey = "f767322c6603d96df24acb38c5f96cbd"
-// Variables
 let input = document.querySelector('.input')
-// Search button event listener
 let searchButton = document.querySelector(".searchButton");
 let cityForecast = document.querySelector(".cityForecast")
 let fiveDayForecast = document.querySelector(".fiveDayForecast")
-searchButton.addEventListener("click", callGeoCoordinates)
-searchButton.addEventListener("click", createSearchList)
-// searchButton.addEventListener("click", createTodayForecast)
 let today = moment();
+
+searchButton.addEventListener("click", callGeoCoordinates)
 
 // Fetch request to API
 function callGeoCoordinates(){
-    //capture input field
     let cityName = input.value
     let baseUrl = "http://api.openweathermap.org/data/2.5/weather?q="
-    let url = baseUrl + cityName + "&APPID=" + APIkey
+    let url = baseUrl + cityName + "&units=imperial&APPID=" + APIkey
 
     fetch(url)
         .then(result => result.json())
         .then(result => {
-            console.log(result)
-            let temp = convertKToF(result.main.temp)
-            
             getForecastWithCoords(result.coord)
-            
-            renderDailyForecastToScreen(result.name)
-
+            renderDailyForecastToScreen(result)
+            createSearchList(result.name)
+            getUVindex(result.coord)
         })
-
-    //pass key into API
 }
-
 
 function getForecastWithCoords(coord){
     let lon = coord.lon
     let lat = coord.lat
-    let url = "api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey
-    fetch(url)
-    .then(result => result.json())
-    .then(result => {
-          console.log(result)
-    })
-
+    let url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=" + APIkey
     
+    fetch(url)
+        .then(result => result.json())
+        .then(result => renderFiveDayForecast(result))   
 }
 
-function convertKToF(tempInK){
-    return (tempInK + 459.67) * 5/9
+function getUVindex(coord){
+    let lon = coord.lon
+    let lat = coord.lat
+    let url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon +"&exclude=minutely,hourly,alerts&appid=" + APIkey
+    
+    fetch(url) 
+        .then(result => result.json())
+        .then(result => renderUVindex(result.current.uvi))
 }
 
-// create past search buttons
-function createSearchList(){
+function createSearchList(name){
     let pastSearchButton = document.createElement("button");
-    pastSearchButton.innerHTML= input.value;
     let pastSearchSection = document.querySelector(".pastSearches");
+    let baseUrl = "http://api.openweathermap.org/data/2.5/weather?q="
+    let url = baseUrl + name + "&units=imperial&APPID=" + APIkey
+
+    pastSearchButton.innerHTML= name;
     pastSearchSection.appendChild(pastSearchButton);
+    pastSearchButton.addEventListener("click", recallGeoCoordinates)
+
+    function recallGeoCoordinates(){
+        fetch(url)
+            .then(result => result.json())
+            .then(result => {
+                getForecastWithCoords(result.coord)
+                renderDailyForecastToScreen(result)
+                getUVindex(result.coord)
+            })
+    }
 }
 
-
-function renderDailyForecastToScreen(cityName) {
-    let cityTitle = document.querySelector(".cityTitle")
-    cityTitle.innerHTML = cityName
-
+function renderDailyForecastToScreen(weatherInfo){
+    document.querySelector(".cityTitle").innerHTML = weatherInfo.name
+    document.querySelector(".todayTemp").innerHTML = "Temp: " + weatherInfo.main.temp + "°F"
+    document.querySelector(".todayWind").innerHTML = "Wind: " + weatherInfo.wind.speed + "mph"
+    document.querySelector(".todayHumidity").innerHTML = "Humidity: " + weatherInfo.main.humidity + "%"
 }
 
+function renderUVindex(uvi){
+    let uvIndex = document.querySelector(".uvIndex")
+    uvIndex.innerHTML = "UV: " + uvi
+
+    uvIndex.classList.remove("low", "moderate", "high", "veryHigh", "extreme")
+
+    if(uvi < 2.99){
+        uvIndex.classList.add("low")
+    }
+    if (uvi > 2.99 && uvi < 5.99){
+        uvIndex.classList.add("moderate")
+    }
+    if (uvi > 5.99 && uvi < 7.99){
+        uvIndex.classList.add("high")
+    }
+    if (uvi > 7.99 && uvi < 10.99 ){
+        uvIndex.classList.add("veryHigh")
+    }
+     if (uvi > 10.99){
+        uvIndex.classList.add("extreme")
+    }
+}
+
+function renderFiveDayForecast(forecastInfo){
+    let fiveDayInfo = forecastInfo.list
+    let dayNum = 1
+    
+    for(i = 4; i <= 36; i += 8) {
+        let date = fiveDayInfo[i].dt_txt.split('').splice(0,10).join('')
+        document.querySelector(`.day${dayNum} .date`).innerHTML = date
+        document.querySelector(`.day${dayNum} .temp`).innerHTML = `Temp: ${fiveDayInfo[i].main.temp}°F`
+        document.querySelector(`.day${dayNum} .wind`).innerHTML = "Wind: " + fiveDayInfo[i].wind.speed + "mph"
+        document.querySelector(`.day${dayNum} .humidity`).innerHTML = "Humidity: " + fiveDayInfo[i].main.humidity + "%"
+        dayNum++
+    }
+}
+ 
 function createForecastScaffold() {
     let cityTitle = document.createElement("h2")
     let todayDate = document.createElement("h2")
@@ -95,8 +136,6 @@ function createForecastScaffold() {
     todayHumidity.innerHTML = "Humidity:"
     uvIndex.innerHTML = "UV:"
 
-
-
     for (i = 1; i < 6; i++) {
         let forecastBox = document.createElement("div")
         let date = document.createElement("h2")
@@ -124,16 +163,3 @@ function createForecastScaffold() {
 }
 
 createForecastScaffold()
-// create5DayScaffold()
-// createTodayForecast()
-
-//populate information into HTML (respons object)
-//render information to screen
-
-// Notes:connect to geo location with promise based .then method
-
-// let myFuntionName = function (param1) {
-//     return param1
-// }
-
-// let myArrowFunction = param1 => param1 + 1
