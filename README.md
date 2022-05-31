@@ -2,6 +2,10 @@
 
 ![Weather App](Weather_App.png)
 
+ https://tanyamilburn.github.io/rain-in-spain-6/
+
+ Weather App Criteria/Features:
+
 GIVEN a weather dashboard with form inputs
 
 WHEN I search for a city
