@@ -1,5 +1,7 @@
 # schedule-challenge-5
 
+![Weather App](Weather_App.png)
+
 GIVEN a weather dashboard with form inputs
 
 WHEN I search for a city
